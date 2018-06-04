@@ -1,0 +1,99 @@
+[Stack]
+FillEnabled=0
+OverflowWarningsEnabled=1
+WarningThreshold=90
+SpWarningsEnabled=1
+WarnLogOnly=1
+UseTrigger=1
+TriggerName=main
+LimitSize=0
+ByteLimit=50
+[DebugChecksum]
+Checksum=-1520844715
+[CallStack]
+ShowArgs=0
+[Disassembly]
+MixedMode=1
+[InterruptLog]
+LogEnabled=0
+SumEnabled=0
+GraphEnabled=0
+ShowTimeLog=1
+ShowTimeSum=1
+SumSortOrder=0
+[DataLog]
+LogEnabled=0
+SumEnabled=0
+GraphEnabled=0
+ShowTimeLog=1
+ShowTimeSum=1
+[Breakpoints2]
+Count=0
+[Interrupts]
+Enabled=1
+[MemoryMap]
+Enabled=0
+Base=0
+UseAuto=0
+TypeViolation=1
+UnspecRange=1
+ActionState=1
+[Trace1]
+Enabled=0
+ShowSource=1
+[struct_types]
+Fmt0=Config_t-nodeID	4	0
+Fmt1=Config_t-version	4	0
+Fmt2=Hue_t-CCT	3	0
+[array_types]
+Fmt0=uint8_t[128]	4	0
+Fmt1=uint8_t[50]	4	0
+Fmt2=uint8_t[6]	4	0
+[watch_formats]
+Fmt0={W}1:mTimerKeepAlive	4	0
+[DataSample]
+LogEnabled=0
+GraphEnabled=0
+ShowTimeLog=1
+ShowTimeSum=1
+[TermIOLog]
+LoggingEnabled=_ 0
+LogFile=_ ""
+[Log file]
+LoggingEnabled=_ 0
+LogFile=_ ""
+Category=_ 0
+[Breakpoints]
+Bp0=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.958.1" 1 0 0 0 "" 0 ""
+Bp1=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.958.1" 1 0 0 0 "" 0 ""
+Bp2=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.1764.1" 1 0 0 0 "" 0 ""
+Bp3=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.1764.3" 1 0 0 0 "" 0 ""
+Bp4=_ "STD_CODE" "{$PROJ_DIR$\Project\src\LightPwmDrv.c}.516.3" 0 0 0 0 "" 0 ""
+Bp5=_ "STD_CODE" "{$PROJ_DIR$\Project\src\LightPwmDrv.c}.507.16" 0 0 0 0 "" 0 ""
+Bp6=_ "STD_CODE" "{$PROJ_DIR$\Project\src\LightPwmDrv.c}.509.7" 0 0 0 0 "" 0 ""
+Bp7=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.1756.3" 1 0 0 0 "" 0 ""
+Bp8=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.958.1" 1 0 0 0 "" 0 ""
+Bp9=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.475.1" 1 0 0 0 "" 0 ""
+Bp10=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.958.5" 1 0 0 0 "" 0 ""
+Bp11=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.475.1" 1 0 0 0 "" 0 ""
+Bp12=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.296.5" 1 0 0 0 "" 0 ""
+Bp13=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.378.1" 1 0 0 0 "" 0 ""
+Bp14=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.940.1" 1 0 0 0 "" 0 ""
+Bp15=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.940.5" 1 0 0 0 "" 0 ""
+Bp16=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.941.7" 1 0 0 0 "" 0 ""
+Bp17=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.475.9" 1 0 0 0 "" 0 ""
+Bp18=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.502.3" 1 0 0 0 "" 0 ""
+Bp19=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.409.7" 1 0 0 0 "" 0 ""
+Bp20=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.393.7" 1 0 0 0 "" 0 ""
+Bp21=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.509.3" 1 0 0 0 "" 0 ""
+Bp22=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.378.3" 1 0 0 0 "" 0 ""
+Bp23=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.505.5" 1 0 0 0 "" 0 ""
+Bp24=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.356.5" 1 0 0 0 "" 0 ""
+Bp25=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.977.7" 1 0 0 0 "" 0 ""
+Bp26=_ "STD_CODE" "{$PROJ_DIR$\Project\src\main.c}.959.5" 1 0 0 0 "" 0 ""
+Count=27
+[Aliases]
+Count=0
+SuppressDialog=0
+[DebuggerSettings]
+DisableInterruptsWhenStepping=0

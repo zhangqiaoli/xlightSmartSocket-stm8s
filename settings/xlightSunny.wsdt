@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Workspace>
+  <ConfigDictionary>
+    
+  <CurrentConfigs><Project>xlightSunny/Debug</Project></CurrentConfigs></ConfigDictionary>
+  <Desktop>
+    <Static>
+      <Workspace>
+        <ColumnWidths>
+          
+          
+          
+          
+        <Column0>234</Column0><Column1>11</Column1><Column2>10</Column2><Column3>0</Column3></ColumnWidths>
+      </Workspace>
+      <Build>
+        
+        
+        
+        
+      <ColumnWidth0>20</ColumnWidth0><ColumnWidth1>810</ColumnWidth1><ColumnWidth2>273</ColumnWidth2><ColumnWidth3>68</ColumnWidth3></Build>
+    <TerminalIO/><Debug-Log><ColumnWidth0>19</ColumnWidth0><ColumnWidth1>1862</ColumnWidth1></Debug-Log><Select-Ambiguous-Definitions><ColumnWidth0>408</ColumnWidth0><ColumnWidth1>58</ColumnWidth1><ColumnWidth2>699</ColumnWidth2></Select-Ambiguous-Definitions></Static>
+    <Windows>
+      
+      
+    <Wnd0>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-4953-29945</Identity>
+            <TabName>Workspace</TabName>
+            <Factory>Workspace</Factory>
+            <Session>
+              
+            <NodeDict><ExpandedNode>xlightSunny</ExpandedNode><ExpandedNode>xlightSunny/Output</ExpandedNode><ExpandedNode>xlightSunny/STM8S Library</ExpandedNode><ExpandedNode>xlightSunny/STM8S Library/inc</ExpandedNode><ExpandedNode>xlightSunny/STM8S Library/src</ExpandedNode><ExpandedNode>xlightSunny/User</ExpandedNode><ExpandedNode>xlightSunny/User/common</ExpandedNode><ExpandedNode>xlightSunny/User/inc</ExpandedNode><ExpandedNode>xlightSunny/User/src</ExpandedNode></NodeDict></Session>
+          </Tab>
+        </Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd0><Wnd1>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-25405-29971</Identity>
+            <TabName>Build</TabName>
+            <Factory>Build</Factory>
+            <Session/>
+          </Tab>
+        <Tab><Identity>TabID-21234-31753</Identity><TabName>Debug Log</TabName><Factory>Debug-Log</Factory><Session/></Tab><Tab><Identity>TabID-14596-30727</Identity><TabName>Ambiguous Definitions</TabName><Factory>Select-Ambiguous-Definitions</Factory><Session/></Tab></Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd1></Windows>
+    <Editor>
+      
+      
+      
+      
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\Project\src\main.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>579</YPos2><SelStart2>17523</SelStart2><SelEnd2>17523</SelEnd2></Tab><ActiveTab>0</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\Project\inc\_global.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>195</YPos2><SelStart2>7961</SelStart2><SelEnd2>7961</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\Project\src\ProtocolParser.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>224</YPos2><SelStart2>9565</SelStart2><SelEnd2>9575</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\xlightCommon-stm8s\Xlight_lib\MyMessage.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>63</YPos2><SelStart2>3084</SelStart2><SelEnd2>3084</SelEnd2></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Positions>
+      
+      
+      
+      
+      
+    <Top><Row0><Sizes><Toolbar-07E97F80><key>iaridepm.enu1</key></Toolbar-07E97F80></Sizes></Row0></Top><Left><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>767</Bottom><Right>292</Right><x>-2</x><y>-2</y><xscreen>1875</xscreen><yscreen>72</yscreen><sizeHorzCX>1063528</sizeHorzCX><sizeHorzCY>75314</sizeHorzCY><sizeVertCX>166761</sizeVertCX><sizeVertCY>804393</sizeVertCY></Rect></Wnd0></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>144</Bottom><Right>1765</Right><x>-2</x><y>-2</y><xscreen>1767</xscreen><yscreen>146</yscreen><sizeHorzCX>1002269</sizeHorzCX><sizeHorzCY>152720</sizeHorzCY><sizeVertCX>1063528</sizeVertCX><sizeVertCY>75314</sizeVertCY></Rect></Wnd1></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+  </Desktop>
+</Workspace>
+
+
