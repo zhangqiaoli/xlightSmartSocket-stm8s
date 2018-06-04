@@ -92,7 +92,7 @@ Config_t gConfig;
 MyMessage_t sndMsg, rcvMsg;
 uint8_t *psndMsg = (uint8_t *)&sndMsg;
 uint8_t *prcvMsg = (uint8_t *)&rcvMsg;
-bool gIsChanged = FALSE;
+bool gIsConfigChanged = FALSE;
 bool gNeedSaveBackup = FALSE;
 bool gIsStatusChanged = FALSE;
 bool gResetRF = FALSE;
@@ -163,119 +163,6 @@ bool isNodeIdRequired()
   return( isIdentityEmpty(gConfig.NetworkID, ADDRESS_WIDTH) || isIdentityEqual(gConfig.NetworkID, RF24_BASE_RADIO_ID, ADDRESS_WIDTH) );
 }
 
-// Save config to Flash
-void SaveBackupConfig()
-{
-  if( gNeedSaveBackup ) {
-    // Overwrite entire config FLASH
-    if(Flash_WriteDataBlock(BACKUP_CONFIG_BLOCK_NUM, (uint8_t *)&gConfig, sizeof(gConfig)))
-    {
-      gNeedSaveBackup = FALSE;
-    }
-  }
-}
-
-// Save status to Flash
-void SaveStatusData()
-{
-    // Skip the first byte (version)
-    uint8_t pData[50] = {0};
-    uint16_t nLen = (uint16_t)(&(gConfig.nodeID)) - (uint16_t)(&gConfig);
-    memcpy(pData, (uint8_t *)&gConfig, nLen);
-    if(Flash_WriteDataBlock(STATUS_DATA_NUM, pData, nLen))
-    {
-      gIsStatusChanged = FALSE;
-    }
-}
-
-// Save config to Flash
-void SaveConfig()
-{
-  if( gIsStatusChanged ) {
-    // Overwrite only Static & status parameters
-    SaveStatusData();
-    gIsChanged = TRUE;
-  }
-#ifdef TEST
-  PB3_High;
-#endif
-  if( gIsChanged ) {
-    // Overwrite entire config FLASH
-    if( !isNodeIdRequired() ) gNeedSaveBackup = TRUE;
-    uint8_t Attmpts = 0;
-    while(++Attmpts <= 3) {
-      if(Flash_WriteDataBlock(0, (uint8_t *)&gConfig, sizeof(gConfig)))
-      {
-        gIsStatusChanged = FALSE;
-        gIsChanged = FALSE;
-        break;
-      }
-    }
-  }
-#ifdef TEST
-  PB3_Low;
-#endif
-}
-
-// Initialize Node Address and look forward to being assigned with a valid NodeID by the SmartController
-void InitNodeAddress() {
-  // Whether has preset node id
-  gConfig.nodeID = XLA_PRODUCT_NODEID;
-  memcpy(gConfig.NetworkID, RF24_BASE_RADIO_ID, ADDRESS_WIDTH);
-}
-
-bool IsConfigInvalid() {
-  return( gConfig.version > XLA_VERSION || gConfig.version < XLA_MIN_VER_REQUIREMENT 
-       || gConfig.nodeID == 0 || !IS_AC_NODEID(gConfig.nodeID)
-       || gConfig.rfPowerLevel > RF24_PA_MAX || gConfig.rfChannel > 127 || gConfig.rfDataRate > RF24_250KBPS );
-}
-
-// Load config from Flash
-void LoadConfig()
-{
-  // Load the most recent settings from FLASH
-  Flash_ReadBuf(FLASH_DATA_START_PHYSICAL_ADDRESS, (uint8_t *)&gConfig, sizeof(gConfig));
-  if( IsConfigInvalid() ) {
-      // If config is OK, then try to load config from backup area
-      Flash_ReadBuf(BACKUP_CONFIG_ADDRESS, (uint8_t *)&gConfig, sizeof(gConfig));
-      if( IsConfigInvalid() ) {
-        // If neither valid, then initialize config with default settings
-        memset(&gConfig, 0x00, sizeof(gConfig));
-        gConfig.version = XLA_VERSION;
-        InitNodeAddress();
-        gConfig.subID = 0;
-        gConfig.type = XLA_PRODUCT_Type;
-        gConfig.rptTimes = 1;
-        gConfig.rfChannel = RF24_CHANNEL;
-        gConfig.rfPowerLevel = RF24_PA_MAX;
-        gConfig.rfDataRate = RF24_250KBPS;
-      }
-      gIsChanged = TRUE;
-    } else {
-      uint8_t bytVersion;
-      Flash_ReadBuf(BACKUP_CONFIG_ADDRESS, (uint8_t *)&bytVersion, sizeof(bytVersion));
-      if( bytVersion != gConfig.version ) gNeedSaveBackup = TRUE;
-    }
-    // Load the most recent status from FLASH
-    uint8_t pData[50] = {0};
-    uint16_t nLen = (uint16_t)(&(gConfig.nodeID)) - (uint16_t)(&gConfig);
-    Flash_ReadBuf(STATUS_DATA_ADDRESS, pData, nLen);
-    if(pData[0] >= XLA_MIN_VER_REQUIREMENT && pData[0] <= XLA_VERSION)
-    {
-      memcpy(&gConfig,pData,nLen);
-    }
-    // Start ZenSensor
-    gConfig.state = 1;
-    gConfig.nodeID = XLA_PRODUCT_NODEID;
-
-    gConfig.rfChannel = 110;
-#ifdef EN_PANEL_BUTTONS
-    if( gConfig.btnAction[0][0].action > 0x0F || gConfig.btnAction[1][0].action > 0x0F ) {
-      memset(gConfig.btnAction, 0x00, sizeof(Button_Action_t) * MAX_NUM_BUTTONS);
-    }
-#endif    
-}
-
 void UpdateNodeAddress(uint8_t _tx) {
   memcpy(rx_addr, gConfig.NetworkID, ADDRESS_WIDTH);
   rx_addr[0] = gConfig.nodeID;
@@ -286,14 +173,6 @@ void UpdateNodeAddress(uint8_t _tx) {
     tx_addr[0] = (isNodeIdRequired() ? BASESERVICE_ADDRESS : NODEID_GATEWAY);
   }
   RF24L01_setup(gConfig.rfChannel, gConfig.rfDataRate, gConfig.rfPowerLevel, BROADCAST_ADDRESS);
-}
-
-bool WaitMutex(uint32_t _timeout) {
-  while(_timeout--) {
-    if( mutex > 0 ) return TRUE;
-    feed_wwdg();
-  }
-  return FALSE;
 }
 
 bool NeedUpdateRFAddress(uint8_t _dest) {
@@ -323,6 +202,159 @@ void ResetRFModule()
     mStatus = SYS_RESET;
     gResetNode=FALSE;
   }
+}
+
+// Save config to Flash
+void SaveBackupConfig()
+{
+  if( gNeedSaveBackup ) {
+    // back config FLASH
+    if(Flash_WriteDataBlock(BACKUP_CONFIG_BLOCK_NUM, (uint8_t *)&gConfig, sizeof(gConfig)))
+    {
+      gNeedSaveBackup = FALSE;
+    }
+  }
+}
+
+// Save status to Flash
+void SaveStatusData()
+{
+  // status data contain nodeid subid and networkid
+  if(gIsStatusChanged)
+  {
+    gNeedSaveBackup = TRUE;
+    uint8_t pData[50] = {0};
+    uint16_t nLen = (uint8_t *)(&gConfig.rfChannel) - (uint8_t *)(&gConfig);
+    memcpy(pData, (uint8_t *)&gConfig, nLen);
+    if(Flash_WriteDataBlock(STATUS_DATA_NUM, pData, nLen))
+    {
+      gIsStatusChanged = FALSE;
+    }
+  }
+}
+
+// Save config data to Flash(can't be called at working time)
+void SaveConfig()
+{
+  if( gIsConfigChanged ) {
+    gNeedSaveBackup = TRUE;
+    // Overwrite entire config FLASH 
+    uint8_t Attmpts = 0;
+    while(++Attmpts <= 3) {
+      if(Flash_WriteDataBlock(0, (uint8_t *)&gConfig, sizeof(gConfig)))
+      {
+        gIsConfigChanged = FALSE;
+        break;
+      }
+    }
+  }
+  if(!gIsConfigChanged)
+  { // ensure rf info is up to date
+    ResetRFModule();
+  }
+  SaveStatusData();
+}
+
+// Initialize Node Address and look forward to being assigned with a valid NodeID by the SmartController
+void InitNodeAddress() {
+  // Whether has preset node id
+  gConfig.nodeID = XLA_PRODUCT_NODEID;
+  memcpy(gConfig.NetworkID, RF24_BASE_RADIO_ID, ADDRESS_WIDTH);
+}
+
+bool IsStatusInvalid() {
+  // gConfig.aircondStatus[2] > 32 temp more than 32
+  return( gConfig.version > XLA_VERSION || gConfig.version < XLA_MIN_VER_REQUIREMENT);
+}
+
+bool IsConfigInvalid() {
+  return( gConfig.version > XLA_VERSION || gConfig.version < XLA_MIN_VER_REQUIREMENT 
+       || gConfig.nodeID == 0 || !IS_AC_NODEID(gConfig.nodeID)
+       || gConfig.rfPowerLevel > RF24_PA_MAX || gConfig.rfChannel > 127 || gConfig.rfDataRate > RF24_250KBPS );
+}
+
+bool isNodeIdInvalid()
+{
+  return( !IS_AC_NODEID(gConfig.nodeID)  );
+}
+
+// Load config from Flash
+void LoadConfig()
+{
+    // Load the config area
+  Flash_ReadBuf(FLASH_DATA_START_PHYSICAL_ADDRESS, (uint8_t *)&gConfig, sizeof(gConfig));
+  uint16_t nStatusLen = (uint8_t *)(&gConfig.nodeID) - (uint8_t *)(&gConfig);
+  if( IsConfigInvalid() ) {
+    // If config isn't OK, then try to load config from backup area
+    Flash_ReadBuf(BACKUP_CONFIG_ADDRESS+nStatusLen, (uint8_t *)&gConfig.nodeID, sizeof(gConfig)-nStatusLen);
+    bool backupInvalid = IsConfigInvalid();
+    InitNodeAddress();
+    if( backupInvalid ) {
+      // If neither valid, then initialize config with default settings
+        memset(&gConfig, 0x00, sizeof(gConfig));
+        gConfig.version = XLA_VERSION;
+        InitNodeAddress();
+        gConfig.subID = 0;
+        gConfig.type = XLA_PRODUCT_Type;
+        gConfig.rptTimes = 1;
+        gConfig.rfChannel = RF24_CHANNEL;
+        gConfig.rfPowerLevel = RF24_PA_MAX;
+        gConfig.rfDataRate = RF24_250KBPS;
+    }
+    gIsConfigChanged = TRUE;
+    SaveConfig();
+  } else {
+    uint8_t bytVersion;
+    Flash_ReadBuf(BACKUP_CONFIG_ADDRESS, (uint8_t *)&bytVersion, sizeof(bytVersion));
+    if( bytVersion != gConfig.version ) gNeedSaveBackup = TRUE;
+  }
+  // Load the most recent status from FLASH
+  uint8_t pData[50];
+  memset(pData,0x00,sizeof(pData));
+  uint16_t nLen = (uint8_t *)(&gConfig.rfChannel) - (uint8_t *)(&gConfig);
+  Flash_ReadBuf(STATUS_DATA_ADDRESS, pData, nLen);
+  if(pData[0] >= XLA_MIN_VER_REQUIREMENT && pData[0] <= XLA_VERSION)
+  { // status data valid    
+    memcpy(&gConfig,pData,nStatusLen);
+    if(isIdentityEqual(gConfig.NetworkID, RF24_BASE_RADIO_ID, ADDRESS_WIDTH) && !isNodeIdInvalid() )
+    { // valid nodeid but with default network config,can covered by status data or back data if they are valid
+      uint16_t networkOffset = (uint8_t *)(&gConfig.NetworkID) - (uint8_t *)(&gConfig);
+      if( !isIdentityEmpty(pData+networkOffset,sizeof(gConfig.NetworkID)) )
+      {
+        memcpy(gConfig.NetworkID,pData+networkOffset,sizeof(gConfig.NetworkID));
+      } 
+    } 
+  }
+  else
+  { // load backup area for status data
+    Flash_ReadBuf(BACKUP_CONFIG_ADDRESS, pData, nLen);
+    if(pData[0] >= XLA_MIN_VER_REQUIREMENT && pData[0] <= XLA_VERSION)
+    { // status data valid 
+      memcpy(&gConfig,pData,nStatusLen);
+      if(isIdentityEqual(gConfig.NetworkID, RF24_BASE_RADIO_ID, ADDRESS_WIDTH) && !isNodeIdInvalid())
+      { // valid nodeid but with default network config,can covered by status data or back data if they are valid
+        uint16_t networkOffset = (uint8_t *)(&gConfig.NetworkID) - (uint8_t *)(&gConfig);
+        if( !isIdentityEmpty(pData+networkOffset,sizeof(gConfig.NetworkID)) )
+        {
+          memcpy(gConfig.NetworkID,pData+networkOffset,sizeof(gConfig.NetworkID));
+        }        
+      }
+    }
+  }
+ 
+  if(IsStatusInvalid())
+  {
+    // default status value
+    gConfig.version = XLA_VERSION;
+  }
+}
+
+bool WaitMutex(uint32_t _timeout) {
+  while(_timeout--) {
+    if( mutex > 0 ) return TRUE;
+    feed_wwdg();
+  }
+  return FALSE;
 }
 
 // Send message and switch back to receive mode
@@ -395,15 +427,13 @@ bool SendMyMessage() {
 void GotNodeID() {
   mGotNodeID = TRUE;
   UpdateNodeAddress(NODEID_GATEWAY);
-  gIsChanged = TRUE;
-  //SaveConfig();
+  gNeedSaveBackup = TRUE;
 }
 
 void GotPresented() {
   mStatus = SYS_RUNNING;
   gConfig.swTimes = 0;
   gIsStatusChanged = TRUE;
-  //SaveConfig();  
 }
 
 bool SayHelloToDevice(bool infinate) {

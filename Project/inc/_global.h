@@ -75,8 +75,6 @@ typedef struct
   UC state                    :1;           // SuperSensor On/Off
   UC swTimes                  :4;           // On/Off times
   UC reserved0                :2;
-  US aircondCode              :16;
-  UC aircondStatus[14];
 
   // Configurable parameters
   UC nodeID;                                // Node ID for this device
@@ -94,7 +92,7 @@ typedef struct
 } Config_t;
 
 extern Config_t gConfig;
-extern bool gIsChanged;
+extern bool gIsConfigChanged;
 extern bool gNeedSaveBackup;
 extern bool gIsStatusChanged;
 extern bool gResetRF;
