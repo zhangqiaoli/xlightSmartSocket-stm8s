@@ -5,8 +5,8 @@
 #define COLLECT_INTERVAL    5000   // 5000*200us = 1000ms
 #define COLLECT_SAMPLE_NUM  100
 
-uint16_t Vref = 513;
-uint16_t ADC_IValue = 0;
+uint16_t ADC_IMIN = 0;
+uint16_t ADC_IMAX = 0;
 
 uint16_t curr_mvData[CURRENT_WIN] = {0};
 uint8_t curr_mvPtr = 0;
@@ -49,12 +49,17 @@ void init_ADC()
 //Iefc=Imax*0.707
 //Iefc=(AD_Vref-AD_value_min)*0.707/31*100=(AD_Vref-AD_value_min)*2.28;Magnified 100 times
 uint16_t CalcEffectiveValue()
-{	  
-        uint16_t EffectiveValue = ADC_IValue;
-        if(EffectiveValue>Vref)
-                EffectiveValue = Vref;
-        EffectiveValue = (Vref-EffectiveValue)*22/10;
-	return EffectiveValue;
+{	 
+     uint16_t EffectiveValue = 0;
+     if(ADC_IMAX > ADC_IMIN)
+     {
+        EffectiveValue = ((ADC_IMAX-ADC_IMIN)*21-11)/10;
+     }
+     else
+     {
+        EffectiveValue = 0;
+     }
+     return EffectiveValue;
 }
 
 void read_ADC_value()
@@ -69,14 +74,19 @@ void read_ADC_value()
 	ADC1_ClearFlag(ADC1_FLAG_EOC);
         if(index == 0)
         {
-                ADC_IValue = adc_value;
+                ADC_IMIN = adc_value;
+                ADC_IMAX = adc_value;
                 index++;
         }	
 	else if(index<COLLECT_SAMPLE_NUM)
 	{
-                if(adc_value < ADC_IValue)
+                if(adc_value < ADC_IMIN)
                 {
-                  ADC_IValue = adc_value;
+                  ADC_IMIN = adc_value;
+                }
+                else if(adc_value > ADC_IMAX)
+                {
+                  ADC_IMAX = adc_value;
                 }
 		index++;
 	}

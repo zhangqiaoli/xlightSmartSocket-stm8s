@@ -551,7 +551,8 @@ int main( void ) {
   SaveConfig(); 
 
   init_ADC();
-  //printlog("start...\r\n");
+  uart2_config(9600);
+  printlog("start...\r\n");
   // Init timer
   TIM4_10ms_handler = tmrProcess;
   Time4_Init();
